@@ -5,13 +5,12 @@ let profileUuid = document.body.querySelector("main.container").querySelector(".
 fetch("https://minecraftcapes.net/profile/" + profileUuid).then(function(response) {
     return response.json();
 }).then(function(body) {
-    console.log(body);
-    if(body.textures.cape != null) {
-        userHasCape();
-    }
-
     if(body.textures.ears != null) {
         userHasEars();
+    }
+
+    if(body.textures.cape != null) {
+        userHasCape();
     }
 });
 
