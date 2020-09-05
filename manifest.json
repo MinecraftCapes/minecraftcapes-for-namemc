@@ -1,0 +1,30 @@
+{
+    "name": "MinecraftCapes for NameMC",
+    "version": "1.0",
+    "description": "Adds MinecraftCapes.Net support to NameMC.com",
+    "content_scripts": [
+        {
+            "matches": ["https://*.namemc.com/profile/*"],
+            "js": ["contentScript.js"]
+        }
+    ],
+    "page_action": {
+        "default_icon": {
+            "16": "images/favicon-16.png",
+            "32": "images/favicon-32.png",
+            "48": "images/favicon-48.png",
+            "128": "images/favicon-128.png"
+        }
+    },
+    "icons": {
+        "16": "images/favicon-16.png",
+        "32": "images/favicon-32.png",
+        "48": "images/favicon-48.png",
+        "128": "images/favicon-128.png"
+    },
+    "permissions": [
+        "activeTab"
+    ],
+    "web_accessible_resources": ["minecraftcapes.html"],
+    "manifest_version": 2
+  }
