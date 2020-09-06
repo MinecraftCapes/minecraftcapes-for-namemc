@@ -36,8 +36,15 @@ function userHasFeature(type) {
 
     //Add the image
     let featureImage = document.createElement("img");
-    featureImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/" + type;
-    featureImage.classList.add("img-fluid");
+    let featureImageStyles = "image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: optimize-contrast; image-rendering: pixelated; -ms-interpolation-mode: nearest-neighbor;"
+    featureImage.setAttribute("style", featureImageStyles)
+    if(type == "cape") {
+        featureImage.style.width = "100%";
+        featureImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/cape"; //for /map in the future
+    } else {
+        featureImage.style.width = "25%";
+        featureImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/ears";
+    }
 
     //Puts the image in a href
     let featureImageHref = document.createElement("a");
