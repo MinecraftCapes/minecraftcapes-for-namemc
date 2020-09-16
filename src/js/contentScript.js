@@ -6,35 +6,98 @@ const profileUuid = document.body.querySelector("main.container").querySelector(
 fetch("https://minecraftcapes.net/profile/" + profileUuid).then(function(response) {
     return response.json();
 }).then(function(body) {
-    createSkinview();
+    createSkinViewer();
 
     if(body.textures.ears != null) {
-        userHasFeature("ears");
+        createEarsCard();
         this.skinViewer.loadEars("https://minecraftcapes.net/profile/" + profileUuid + "/ears")
     }
 
     if(body.textures.cape != null) {
-        userHasFeature("cape");
+        createCapeCard();
         this.skinViewer.loadCustomCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
     }
 
     createSkinEvents();
     createCapeEvents();
 });
+
 /**
- * Creates an element for the user if they actually have a cape/ears
- * @param String type
+ * Creates the cape card
  */
-function userHasFeature(type) {
+function createCapeCard() {
     //Create the parent div
     let featureDiv = document.createElement("div");
-    featureDiv.id = "minecraftcapes-" + type;
+    featureDiv.id = "minecraftcapes-cape";
     featureDiv.className = "card mb-3";
 
     //Add the title
     let featureTitle = document.createElement("strong");
     featureTitle.className = "card-header py-1";
-    featureTitle.innerHTML = "<strong><a href=\"https://minecraftcapes.net\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">MinecraftCapes " + capitalizeFirstLetter(type)  + "</a></strong>";
+    featureTitle.innerHTML = "<strong><a href=\"https://minecraftcapes.net\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">MinecraftCapes Cape</a></strong>";
+    featureDiv.appendChild(featureTitle);
+
+    //Add the body
+    let featureBody = document.createElement("div");
+    featureBody.className = "card-body text-center";
+    featureBody.style.padding = "3px"
+    featureDiv.appendChild(featureBody);
+
+    //Remove the cape highlight
+    let capeChildren = document.getElementsByClassName("cape-2d")
+    for (var i = 0; i < capeChildren.length; i++) {
+        capeChildren[i].classList.remove("skin-button-selected");
+    }
+
+    //Add the image
+    let capeCanvas = document.createElement("canvas");
+    capeCanvas.className = "cape-2d align-top skin-button skin-button-selected";
+    capeCanvas.width = 40;
+    capeCanvas.height = 64;
+
+    capeImage = new Image();
+    capeImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/cape";
+    capeImage.onload = function() {
+        const ctx = capeCanvas.getContext('2d');
+        ctx.mozImageSmoothingEnabled = false;
+        ctx.webkitImageSmoothingEnabled = false;
+        ctx.msImageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = false;
+        capeScale = capeImage.width / 64;
+        ctx.drawImage(capeImage, 1, 1, 10 * capeScale, 16 * capeScale, 0, 0, capeCanvas.width, capeCanvas.height)
+        let frame = 0;
+        setInterval(function() {
+            const offset = (frame * (capeImage.width / 2)) + 1
+            ctx.drawImage(capeImage, 1, offset, 10 * capeScale, 16 * capeScale, 0, 0, capeCanvas.width, capeCanvas.height)
+            frame = frame + 1 > (capeImage.height / (capeImage.width / 2)) - 1 ? 0 : frame + 1;
+        }, 110);
+    }
+
+    //Puts the image in a href
+    let featureImageHref = document.createElement("a");
+    featureImageHref.href = "https://minecraftcapes.net/profile/" + profileUuid + "/cape";
+    featureImageHref.target = "_blank";
+    featureImageHref.appendChild(capeCanvas);
+    featureBody.appendChild(featureImageHref);
+
+    //Insert the div
+    let profileLeft = document.body.querySelector("main.container").querySelector(".row").querySelector("div.col-lg-4");
+    profileLeft.insertBefore(featureDiv, profileLeft.childNodes[7]);
+}
+
+/**
+ * Creates the ears card
+ */
+function createEarsCard() {
+    //Create the parent div
+    let featureDiv = document.createElement("div");
+    featureDiv.id = "minecraftcapes-ears";
+    featureDiv.className = "card mb-3";
+
+    //Add the title
+    let featureTitle = document.createElement("strong");
+    featureTitle.className = "card-header py-1";
+    featureTitle.innerHTML = "<strong><a href=\"https://minecraftcapes.net\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">MinecraftCapes Ears</a></strong>";
     featureDiv.appendChild(featureTitle);
 
     //Add the body
@@ -46,21 +109,12 @@ function userHasFeature(type) {
     let featureImage = document.createElement("img");
     let featureImageStyles = "image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: optimize-contrast; image-rendering: pixelated; -ms-interpolation-mode: nearest-neighbor;"
     featureImage.setAttribute("style", featureImageStyles)
-    if(type == "cape") {
-        featureImage.style.width = "100%";
-        featureImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/cape"; //for /map in the future
-
-        featureImage.addEventListener('mouseover', (event) => {
-            this.skinViewer.loadCustomCape(event.target.src);
-        })
-    } else {
-        featureImage.style.width = "25%";
-        featureImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/ears";
-    }
+    featureImage.style.width = "25%";
+    featureImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/ears";
 
     //Puts the image in a href
     let featureImageHref = document.createElement("a");
-    featureImageHref.href = "https://minecraftcapes.net/user/" + profileUuid + "/" + type;
+    featureImageHref.href = "https://minecraftcapes.net/profile/" + profileUuid + "/ears";
     featureImageHref.target = "_blank";
     featureImageHref.appendChild(featureImage);
     featureBody.appendChild(featureImageHref);
@@ -71,17 +125,9 @@ function userHasFeature(type) {
 }
 
 /**
- * Capitalizes the first letter
- * @param String string
- */
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-/**
  * Creates the skin viewer
  */
-function createSkinview() {
+function createSkinViewer() {
     // Skin
     let featureDiv = document.createElement("div");
     featureDiv.id = "minecraftcapes-skin";
@@ -113,6 +159,18 @@ function createSkinview() {
         }
     })
     featureDiv.appendChild(featureElytraButton);
+    if(document.getElementsByClassName("cape-2d").length == 0) {
+        featureElytraButton.style.display = "none";
+    }
+
+    // Copy the friend button if it exist
+    let friendForm = document.getElementById("add-friend-form");
+    if(friendForm != null) {
+        friendForm = friendForm.cloneNode(true);
+        friendForm.children[2].style.zIndex = "1"
+        document.getElementById("add-friend-form").remove();
+        featureDiv.appendChild(friendForm);
+    }
 
     // Add the body
     let featureBody = document.createElement("div");
@@ -195,11 +253,17 @@ function createCapeEvents() {
     let capeChildren = document.getElementsByClassName("cape-2d")
     for (var i = 0; i < capeChildren.length; i++) {
         capeChildren[i].addEventListener('mouseover', (event) => {
-            if(event.target != undefined) {
-                let capeHash = event.target.getAttribute("data-cape-hash")
+            for (var i = 0; i < capeChildren.length; i++) {
+                capeChildren[i].classList.remove("skin-button-selected");
+            }
+
+            event.target.classList.add("skin-button-selected");
+            let capeHash = event.target.getAttribute("data-cape-hash")
+            if(capeHash != undefined) {
                 let capeUrl = "https://texture.namemc.com/" + capeHash.substring(0, 2) + "/" + capeHash.substring(2, 4) + "/" + capeHash + ".png";
-                console.log(capeUrl);
-                this.skinViewer.loadCape(capeUrl)
+                this.skinViewer.loadCustomCape(capeUrl)
+            } else {
+                this.skinViewer.loadCustomCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
             }
         })
     }
