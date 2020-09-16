@@ -159,9 +159,6 @@ function createSkinViewer() {
         }
     })
     featureDiv.appendChild(featureElytraButton);
-    if(document.getElementsByClassName("cape-2d").length == 0) {
-        featureElytraButton.style.display = "none";
-    }
 
     // Copy the friend button if it exist
     let friendForm = document.getElementById("add-friend-form");
@@ -204,6 +201,8 @@ function createSkinViewer() {
         cape: this.finalCape,
         ears: this.finalEars
     });
+
+    this.skinViewer.loadCustomCape("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgBAMAAABQs2O3AAAAKlBMVEUAAABOTk6NjY2Hh4d7e3tzc3NsbGxZWVlKSkpVVVVoaGiEhIR/f39jY2OSVXT6AAAAAXRSTlMAQObYZgAAAKdJREFUOMtjQAOMgsbGxgz4gCADISDYKCiIX0GHoKAAPgWMQAWClClobBQsx69AYnp5Ah4FnB2SM2vxKphZXj5rAR4F7NOnl6cFYJU6AKHm3kpLC8anYFXaslRnrAoMYAqyQp3xmbA01MUlGqsCBQgV4uri4oRPAatLaIgRVgUboApCXHx24zOBx8ZYSQmfAgYj603YFQTAFChpG+NVwGwEtGIUUBsAADaTIwwcJYk6AAAAAElFTkSuQmCC");
 
     // Control objects with your mouse!
     let control = skinview3d.createOrbitControls(this.skinViewer);
