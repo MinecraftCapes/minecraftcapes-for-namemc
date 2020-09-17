@@ -34,7 +34,7 @@ function createCapeCard() {
     //Add the title
     let featureTitle = document.createElement("strong");
     featureTitle.className = "card-header py-1";
-    featureTitle.innerHTML = "<strong><a href=\"https://minecraftcapes.net\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">MinecraftCapes Cape</a></strong>";
+    featureTitle.innerHTML = "<strong><a href=\"https://minecraftcapes.net\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">MinecraftCapes</a> Cape</strong>";
     featureDiv.appendChild(featureTitle);
 
     //Add the body
@@ -64,13 +64,17 @@ function createCapeCard() {
         ctx.msImageSmoothingEnabled = false;
         ctx.imageSmoothingEnabled = false;
         capeScale = capeImage.width / 64;
-        ctx.drawImage(capeImage, 1, 1, 10 * capeScale, 16 * capeScale, 0, 0, capeCanvas.width, capeCanvas.height)
+        ctx.drawImage(capeImage, 1 * capeScale, 1 * capeScale, 10 * capeScale, 16 * capeScale, 0, 0, capeCanvas.width, capeCanvas.height)
         let frame = 0;
-        setInterval(function() {
-            const offset = (frame * (capeImage.width / 2)) + 1
-            ctx.drawImage(capeImage, 1, offset, 10 * capeScale, 16 * capeScale, 0, 0, capeCanvas.width, capeCanvas.height)
+        let doAnimation = setInterval(function() {
+            const offset = (frame * (capeImage.width / 2))
+            ctx.drawImage(capeImage, 1 * capeScale, offset + (1 * capeScale), 10 * capeScale, 16 * capeScale, 0, 0, capeCanvas.width, capeCanvas.height)
             frame = frame + 1 > (capeImage.height / (capeImage.width / 2)) - 1 ? 0 : frame + 1;
         }, 110);
+
+        if(capeImage.height == capeImage.width / 2) {
+            clearInterval(doAnimation);
+        }
     }
 
     //Puts the image in a href
@@ -97,7 +101,7 @@ function createEarsCard() {
     //Add the title
     let featureTitle = document.createElement("strong");
     featureTitle.className = "card-header py-1";
-    featureTitle.innerHTML = "<strong><a href=\"https://minecraftcapes.net\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">MinecraftCapes Ears</a></strong>";
+    featureTitle.innerHTML = "<strong><a href=\"https://minecraftcapes.net\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">MinecraftCapes</a> Ears</strong>";
     featureDiv.appendChild(featureTitle);
 
     //Add the body
