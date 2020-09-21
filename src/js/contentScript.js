@@ -171,6 +171,11 @@ function createSkinViewer() {
         friendForm.children[2].style.zIndex = "1"
         document.getElementById("add-friend-form").remove();
         featureDiv.appendChild(friendForm);
+
+        //Inject friend code lmao xD
+        var script = document.createElement("script");
+        script.textContent = "$(function() { $('#add-friend-button').click(addFriendClick); });";
+        (document.head).appendChild(script);
     }
 
     // Add the body
