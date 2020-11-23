@@ -15,7 +15,7 @@ fetch("https://minecraftcapes.net/profile/" + profileUuid).then(function(respons
 
     if(body.textures.cape != null) {
         createCapeCard();
-        this.skinViewer.loadCustomCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
+        this.skinViewer.loadCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
     }
 
     createSkinEvents();
@@ -155,11 +155,12 @@ function createSkinViewer() {
     featureElytraButton.className = "btn btn-secondary play-pause-btn position-absolute top-0 right-0 m-2 p-0";
     featureElytraButton.style.cssText  = "height:32px;padding:0px 10px !important;z-index:1;";
     featureElytraButton.addEventListener('click', (event) => {
-        this.skinViewer.toggleElytra();
-        if(this.skinViewer.playerObject.cape.visible) {
-            featureElytraButton.innerHTML = "Show Elytra"
-        } else {
+        if(this.skinViewer.playerObject.backEquipment == "cape") {
             featureElytraButton.innerHTML = "Show Cape"
+            this.skinViewer.loadCape(this.skinViewer.capeImage, { backEquipment: 'elytra' })
+        } else {
+            featureElytraButton.innerHTML = "Show Elytra"
+            this.skinViewer.loadCape(this.skinViewer.capeImage, { backEquipment: 'cape' })
         }
     })
     featureDiv.appendChild(featureElytraButton);
@@ -211,7 +212,7 @@ function createSkinViewer() {
         ears: this.finalEars
     });
 
-    this.skinViewer.loadCustomCape("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgBAMAAABQs2O3AAAAKlBMVEUAAABOTk6NjY2Hh4d7e3tzc3NsbGxZWVlKSkpVVVVoaGiEhIR/f39jY2OSVXT6AAAAAXRSTlMAQObYZgAAAKdJREFUOMtjQAOMgsbGxgz4gCADISDYKCiIX0GHoKAAPgWMQAWClClobBQsx69AYnp5Ah4FnB2SM2vxKphZXj5rAR4F7NOnl6cFYJU6AKHm3kpLC8anYFXaslRnrAoMYAqyQp3xmbA01MUlGqsCBQgV4uri4oRPAatLaIgRVgUboApCXHx24zOBx8ZYSQmfAgYj603YFQTAFChpG+NVwGwEtGIUUBsAADaTIwwcJYk6AAAAAElFTkSuQmCC");
+    this.skinViewer.loadCape("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgBAMAAABQs2O3AAAAKlBMVEUAAABOTk6NjY2Hh4d7e3tzc3NsbGxZWVlKSkpVVVVoaGiEhIR/f39jY2OSVXT6AAAAAXRSTlMAQObYZgAAAKdJREFUOMtjQAOMgsbGxgz4gCADISDYKCiIX0GHoKAAPgWMQAWClClobBQsx69AYnp5Ah4FnB2SM2vxKphZXj5rAR4F7NOnl6cFYJU6AKHm3kpLC8anYFXaslRnrAoMYAqyQp3xmbA01MUlGqsCBQgV4uri4oRPAatLaIgRVgUboApCXHx24zOBx8ZYSQmfAgYj603YFQTAFChpG+NVwGwEtGIUUBsAADaTIwwcJYk6AAAAAElFTkSuQmCC");
 
     // Control objects with your mouse!
     let control = skinview3d.createOrbitControls(this.skinViewer);
@@ -269,9 +270,9 @@ function createCapeEvents() {
             let capeHash = event.target.getAttribute("data-cape-hash")
             if(capeHash != undefined) {
                 let capeUrl = "https://texture.namemc.com/" + capeHash.substring(0, 2) + "/" + capeHash.substring(2, 4) + "/" + capeHash + ".png";
-                this.skinViewer.loadCustomCape(capeUrl)
+                this.skinViewer.loadCape(capeUrl)
             } else {
-                this.skinViewer.loadCustomCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
+                this.skinViewer.loadCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
             }
         })
     }
