@@ -9,23 +9,23 @@ fetch("https://minecraftcapes.net/profile/" + profileUuid).then(function(respons
     createSkinViewer();
 
     if(body.textures.ears != null) {
-        createEarsCard();
-        this.skinViewer.loadEars("https://minecraftcapes.net/profile/" + profileUuid + "/ears")
+        createEarsCard(body.textures.ears);
+        this.skinViewer.loadEars("data:image/png;base64," + body.textures.ears)
     }
 
     if(body.textures.cape != null) {
-        createCapeCard();
-        this.skinViewer.loadCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
+        createCapeCard(body.textures.cape);
+        this.skinViewer.loadCape("data:image/png;base64," + body.textures.cape)
     }
 
     createSkinEvents();
-    createCapeEvents();
+    createCapeEvents(body.textures.cape);
 });
 
 /**
  * Creates the cape card
  */
-function createCapeCard() {
+function createCapeCard(base64Cape) {
     //Create the parent div
     let featureDiv = document.createElement("div");
     featureDiv.id = "minecraftcapes-cape";
@@ -56,7 +56,7 @@ function createCapeCard() {
     capeCanvas.height = 64;
 
     capeImage = new Image();
-    capeImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/cape";
+    capeImage.src = "data:image/png;base64," + base64Cape;
     capeImage.onload = function() {
         const ctx = capeCanvas.getContext('2d');
         ctx.mozImageSmoothingEnabled = false;
@@ -79,7 +79,7 @@ function createCapeCard() {
 
     //Puts the image in a href
     let featureImageHref = document.createElement("a");
-    featureImageHref.href = "https://minecraftcapes.net/profile/" + profileUuid + "/cape";
+    featureImageHref.href = "https://minecraftcapes.net/profile/" + profileUuid + "/cape/map?" + Date.now();
     featureImageHref.target = "_blank";
     featureImageHref.appendChild(capeCanvas);
     featureBody.appendChild(featureImageHref);
@@ -92,7 +92,7 @@ function createCapeCard() {
 /**
  * Creates the ears card
  */
-function createEarsCard() {
+function createEarsCard(base64Ears) {
     //Create the parent div
     let featureDiv = document.createElement("div");
     featureDiv.id = "minecraftcapes-ears";
@@ -114,11 +114,11 @@ function createEarsCard() {
     let featureImageStyles = "image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: optimize-contrast; image-rendering: pixelated; -ms-interpolation-mode: nearest-neighbor;"
     featureImage.setAttribute("style", featureImageStyles)
     featureImage.style.width = "25%";
-    featureImage.src = "https://minecraftcapes.net/profile/" + profileUuid + "/ears";
+    featureImage.src = "data:image/png;base64," + base64Ears;
 
     //Puts the image in a href
     let featureImageHref = document.createElement("a");
-    featureImageHref.href = "https://minecraftcapes.net/profile/" + profileUuid + "/ears";
+    featureImageHref.href = "https://minecraftcapes.net/profile/" + profileUuid + "/ears?" + Date.now();
     featureImageHref.target = "_blank";
     featureImageHref.appendChild(featureImage);
     featureBody.appendChild(featureImageHref);
@@ -223,14 +223,6 @@ function createSkinViewer() {
     this.skinViewerWalk = this.skinViewer.animations.add(skinview3d.WalkingAnimation);
     this.skinViewerWalk.paused = true;
 
-    this.skinViewer.camera.position.x = -31.589169778419507
-    this.skinViewer.camera.position.y = 14.678110751095684
-    this.skinViewer.camera.position.z = 43.47876216571102
-
-    this.skinViewer.camera.rotation.x = -0.5503518828580268
-    this.skinViewer.camera.rotation.y = -0.5544622181239638
-    this.skinViewer.camera.rotation.z = -0.312463891485422
-
     //Set style
     document.getElementById("skin_container").style.filter = "drop-shadow(-5px 5px 7px rgba(0, 0, 0, 0.4))"
     document.getElementById("skin_container").style.outline = "none"
@@ -258,7 +250,7 @@ function createSkinEvents() {
 /**
  * Creates the cape events
  */
-function createCapeEvents() {
+function createCapeEvents(base64Cape) {
     let capeChildren = document.getElementsByClassName("cape-2d")
     for (var i = 0; i < capeChildren.length; i++) {
         capeChildren[i].addEventListener('mouseover', (event) => {
@@ -272,7 +264,7 @@ function createCapeEvents() {
                 let capeUrl = "https://texture.namemc.com/" + capeHash.substring(0, 2) + "/" + capeHash.substring(2, 4) + "/" + capeHash + ".png";
                 this.skinViewer.loadCape(capeUrl)
             } else {
-                this.skinViewer.loadCape("https://minecraftcapes.net/profile/" + profileUuid + "/cape")
+                this.skinViewer.loadCape("data:image/png;base64," + base64Cape)
             }
         })
     }
