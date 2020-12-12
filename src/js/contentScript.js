@@ -226,6 +226,7 @@ function createSkinViewer() {
     //Set style
     document.getElementById("skin_container").style.filter = "drop-shadow(-5px 5px 7px rgba(0, 0, 0, 0.4))"
     document.getElementById("skin_container").style.outline = "none"
+    document.getElementById("skin_container").style.width = "100%"
 
     //Delete the normal one
     profileLeft.childNodes[1].remove();
